@@ -106,7 +106,7 @@ class TwoLayerNet(object):
         exps = np.exp(scores)
         # exps: (N, C) np.sum(exps, axis=1): (N,)
         softmax = exps / np.sum(exps, axis = 1)[..., np.newaxis]
-        loss = np.mean(-np.log(softmax[range(softmax.shape[0]), y])) + reg * (np.sum(W1 * W1) + np.sum(W2 * W2) + np.sum(b1 * b1) + np.sum(b2 * b2))
+        loss = np.mean(-np.log(softmax[range(softmax.shape[0]), y])) + reg * (np.sum(W1 * W1) + np.sum(W2 * W2))
 
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -129,7 +129,7 @@ class TwoLayerNet(object):
 
         # gradient of W2 (H, C). relu1 (N, H), dSoft (N, C)
         dW2 = np.dot(relu1.T, dSoft) + 2 * reg * W2
-        db2 = np.sum(dSoft, axis=0) + 2 * reg * b2
+        db2 = np.sum(dSoft, axis=0)
 
         # (N, H)
         dx2 = np.dot(dSoft, W2.T)
@@ -137,7 +137,7 @@ class TwoLayerNet(object):
         dRelu1 = dx2 * relu1_mask
 
         dW1 = np.dot(X.T, dRelu1) + 2 * reg * W1
-        db1 = np.sum(dRelu1, axis=0) + 2 * reg * b1
+        db1 = np.sum(dRelu1, axis=0)
 
         grads['W1'] = dW1
         grads['W2'] = dW2

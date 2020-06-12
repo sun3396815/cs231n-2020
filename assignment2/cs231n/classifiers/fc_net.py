@@ -321,7 +321,8 @@ class FullyConnectedNet(object):
 
             # dropout
             if self.use_dropout:
-                pass
+                scores, cache_dropout = dropout_forward(scores, self.dropout_param)
+                caches['dropout' + str(i + 1)] = cache_dropout
         
         # for last layer
         scores, cache_fc = affine_forward(scores, self.params['W' + str(self.num_layers)], self.params['b' + str(self.num_layers)])
@@ -364,8 +365,9 @@ class FullyConnectedNet(object):
             
             loss += 0.5 * self.reg * np.sum(self.params['W' + str(i)] * self.params['W' + str(i)])
             # dropout
-            pass
-
+            if self.use_dropout:
+                dx = dropout_backward(dx, caches['dropout' + str(i)])
+            
             # relu
             dx = relu_backward(dx, caches['relu' + str(i)])
 
